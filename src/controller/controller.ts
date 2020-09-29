@@ -1,4 +1,5 @@
-import type { Context, SchemaInfer } from "../../deps.ts";
+import type { Context } from "../../deps.ts";
+import type { Infer } from "../schema.ts";
 
 export type ControllerCallback<T> = (P: {
   query: T;
@@ -6,7 +7,7 @@ export type ControllerCallback<T> = (P: {
   ctx: Context;
 }) => any | Promise<any>;
 
-export class Controller<T, K = SchemaInfer<T>> {
+export class Controller<T, K = Infer<T>> {
   schema: T;
   chain: ControllerCallback<K>[];
 
@@ -23,10 +24,10 @@ export class Controller<T, K = SchemaInfer<T>> {
   callback() {
     const validator = (<any> this.schema).destruct();
 
-    // get trough chain
-
     return async (ctx: Context) => {
-      ctx.response.body = "HEY HEY HEY";
+      const [err, query] = validator(ctx.state.body);
+
+      ctx.response.body = err || query;
     };
   }
 }

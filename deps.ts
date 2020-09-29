@@ -17,7 +17,7 @@ import {
   number,
   boolean,
 } from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/index.ts";
-export type { Type as SchemaInfer } from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/index.ts";
-import Schema from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/index.ts";
-const SchemaTypes = { unknown, string, array, number, boolean };
-export { Schema, SchemaTypes };
+export type { Type as CTInfer } from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/index.ts";
+import CT from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/index.ts";
+const CTTypes = { unknown, string, array, number, boolean };
+export { CT, CTTypes };
