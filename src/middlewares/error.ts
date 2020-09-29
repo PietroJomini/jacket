@@ -1,6 +1,6 @@
 import { Status, Context } from "../../deps.ts";
 
-export default async (
+export const errorHandler = async (
   { response }: Context,
   next: any,
 ) => {
