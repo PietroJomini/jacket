@@ -1,5 +1,5 @@
-import type { Context, Middleware } from "../../deps.ts";
-import type { Infer } from "../schema.ts";
+import type { Context, Middleware } from "../deps.ts";
+import type { Infer } from "./schema.ts";
 import { ChainMiddleware, ChainHalt } from "./chain.ts";
 
 export type Controller<Q = any> = {

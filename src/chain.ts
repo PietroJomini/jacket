@@ -1,4 +1,4 @@
-import type { Context } from "../../deps.ts";
+import type { Context } from "../deps.ts";
 
 export type ChainMiddleware<Q> = (P: {
   query: Q;
