@@ -1,5 +1,5 @@
 import { Router as OakRouter, Middleware } from "../deps.ts";
-import type { Controller } from "./controller/controller.ts";
+import type { Controller } from "./controller.ts";
 
 export type HttpMethod = "GET" | "DELETE" | "PATCH" | "POST";
 
