@@ -14,8 +14,14 @@ export class Server {
     this.oak.use(bodyParser);
   }
 
-  public route(M: Router): void {
-    this.oak.use(M.normalize().routes());
+  public route(M: Router) {
+    this.use(M.normalize().routes());
+    return this;
+  }
+
+  public use(M: Middleware) {
+    this.oak.use(M);
+    return this;
   }
 
   public listen({ port }: { port: number }) {
