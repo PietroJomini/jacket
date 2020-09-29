@@ -6,7 +6,7 @@ export type HttpMethod = "GET" | "DELETE" | "PATCH" | "POST";
 export type Route = {
   method: HttpMethod;
   route: string;
-  controller: Controller<any>;
+  controller: Controller;
 };
 
 export class Router {
@@ -16,24 +16,24 @@ export class Router {
     this.routes = [];
   }
 
-  register(M: HttpMethod, R: string, C: Controller<any>): Router {
+  register(M: HttpMethod, R: string, C: Controller): Router {
     this.routes.push({ method: M, route: R, controller: C });
     return this;
   }
 
-  get(R: string, C: Controller<any>) {
+  get(R: string, C: Controller) {
     this.register("GET", R, C);
     return this;
   }
-  post(R: string, C: Controller<any>) {
+  post(R: string, C: Controller) {
     this.register("POST", R, C);
     return this;
   }
-  patch(R: string, C: Controller<any>) {
+  patch(R: string, C: Controller) {
     this.register("PATCH", R, C);
     return this;
   }
-  delete(R: string, C: Controller<any>) {
+  delete(R: string, C: Controller) {
     this.register("DELETE", R, C);
     return this;
   }
@@ -57,13 +57,13 @@ export class Router {
     const oakRouter = new OakRouter();
     for (const route of this.routes) {
       if (route.method === "GET") {
-        oakRouter.get(route.route, route.controller.callback());
+        oakRouter.get(route.route, route.controller.construct());
       } else if (route.method === "DELETE") {
-        oakRouter.delete(route.route, route.controller.callback());
+        oakRouter.delete(route.route, route.controller.construct());
       } else if (route.method === "PATCH") {
-        oakRouter.patch(route.route, route.controller.callback());
+        oakRouter.patch(route.route, route.controller.construct());
       } else if (route.method === "POST") {
-        oakRouter.post(route.route, route.controller.callback());
+        oakRouter.post(route.route, route.controller.construct());
       }
     }
     return oakRouter;

@@ -1,33 +1,31 @@
-import type { Context } from "../../deps.ts";
+import type { Context, Middleware } from "../../deps.ts";
 import type { Infer } from "../schema.ts";
 
-export type ControllerCallback<T> = (P: {
-  query: T;
+export type ControllerCallback<Q> = (P: {
+  query: Q;
   patload: any;
   ctx: Context;
 }) => any | Promise<any>;
 
-export class Controller<T, K = Infer<T>> {
-  schema: T;
-  chain: ControllerCallback<K>[];
+export type Controller<Q = any> = {
+  use: (callback: ControllerCallback<Q>) => Controller<Q>;
+  construct: () => Middleware;
+};
 
-  constructor(schema: T) {
-    this.schema = schema;
-    this.chain = [];
-  }
-
-  use(C: ControllerCallback<K>) {
-    this.chain.push(C);
-    return this;
-  }
-
-  callback() {
-    const validator = (<any> this.schema).destruct();
+export const controller = <S, Q = Infer<S>>(
+  schema: S,
+  chain: ControllerCallback<Q>[] = [],
+): Controller<Q> => ({
+  use: (C: ControllerCallback<Q>) => controller(schema, [...chain, C]),
+  construct: () => {
+    const validator = (schema as any).destruct();
 
     return async (ctx: Context) => {
       const [err, query] = validator(ctx.state.body);
+      if (err) return (ctx.response.body = err);
 
-      ctx.response.body = err || query;
+      console.log(chain);
+      ctx.response.body = query;
     };
-  }
-}
+  },
+});
