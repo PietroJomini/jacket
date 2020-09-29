@@ -1,11 +1,14 @@
 import { Application, Middleware } from "../deps.ts";
-import type { Router } from "./router/router.ts";
+import type { Router } from "./router.ts";
+
+import errorHandler from "./middlewares/error.ts";
 
 export class Server {
   oak: Application;
 
   constructor() {
     this.oak = new Application();
+    this.oak.use(errorHandler);
   }
 
   public route(M: Router): void {
