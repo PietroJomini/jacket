@@ -1,8 +1,6 @@
 # Jacket
 
-API Wrapper for [deno](deno.land)
-
-
+API Wrapper for [deno](https://deno.land)
 
 ## TODOS
 
