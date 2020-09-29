@@ -6,11 +6,6 @@ export type ChainMiddleware<Q> = (P: {
   ctx: Context;
 }) => any | Promise<any>;
 
-export type ChainHaltPayload = {
-  msg?: string;
-  status?: number;
-};
-
 type ChainHaltP = {
   msg?: string;
   status?: number;
