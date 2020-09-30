@@ -3,6 +3,7 @@ export { Router } from "./src/router.ts";
 export { types } from "./src/schema.ts";
 export { controller } from "./src/controller.ts";
 export { ChainHalt, ensure } from "./src/chain.ts";
+export { middleware as session } from "./src/session/session.ts";
 
 export type { Route, HttpMethod } from "./src/router.ts";
 export type { Infer } from "./src/schema.ts";

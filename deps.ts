@@ -8,6 +8,7 @@ export type {
   RouterMiddleware,
   Middleware,
   Context,
+  CookiesSetDeleteOptions,
 } from "https://deno.land/x/oak@v6.1.0/mod.ts";
 
 import {
@@ -21,3 +22,7 @@ export type { Type as CTInfer } from "https://denoporter.sirjosh.workers.dev/v1/
 import CT from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/index.ts";
 const CTTypes = { unknown, string, array, number, boolean };
 export { CT, CTTypes };
+
+export {
+  v4 as uuid,
+} from "https://deno.land/std/uuid/mod.ts";

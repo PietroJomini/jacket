@@ -15,6 +15,6 @@ API Wrapper for [deno](https://deno.land)
 
 ### Features
 
-- [ ] session
+- [x] session
 - [ ] db
   - [ ] mongo
