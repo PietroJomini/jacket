@@ -23,7 +23,7 @@ export const controller = <S, Q = Infer<S>>(
       for await (const middleware of chain) {
         const MP = await middleware({ query, payload, ctx });
         if (MP instanceof ChainHalt) return ctx.response.body = MP.body();
-        if (MP) payload = MP;
+        if (MP !== null && MP !== undefined) payload = MP;
       }
 
       if (!ctx.response.body) ctx.response.body = payload;
