@@ -12,7 +12,7 @@ const router = new Router();
 
 const schema = types.object({
   name: types.string,
-  age: types.string2number,
+  age: types.number.transform((V) => Number(V)).verify((V) => !isNaN(V)),
 });
 
 const g = new Group<typeof schema>("validate age")

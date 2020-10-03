@@ -1,8 +1,8 @@
 import type { Context, Middleware } from "../deps.ts";
-import type { Infer } from "./schema.ts";
+import type { InferValidator, Validator } from "./schema/validator.ts";
 import { ChainMiddleware, ChainHalt } from "./chain.ts";
 
-export class Controller<S, Q = Infer<S>> {
+export class Controller<S extends Validator<any>, Q = InferValidator<S>> {
   _schema: S;
   _chain: Array<[string, ChainMiddleware<Q>[]]>;
   _endpoint: ChainMiddleware<Q>;
@@ -35,30 +35,31 @@ export class Controller<S, Q = Infer<S>> {
     return this;
   }
 
-  construct(): Middleware {
-    const validator = (this._schema as any).destruct();
-
+  construct() {
     return async (ctx: Context) => {
-      const [err, query] = validator(ctx.state.body);
-      if (err) return ctx.response.body = err;
+      try {
+        const query = this._schema.test(ctx.state.body);
 
-      let GPayload: any;
-      for await (const [group, middlewares] of this._chain) {
-        let payload: any;
-        for await (const middleware of middlewares) {
-          const MP = await middleware({ query, payload, ctx });
-          if (MP instanceof ChainHalt) return ctx.response.body = MP.body();
-          if (MP !== null && MP !== undefined) payload = MP;
+        let GPayload: any;
+        for await (const [group, middlewares] of this._chain) {
+          let payload: any;
+          for await (const middleware of middlewares) {
+            const MP = await middleware({ query, payload, ctx });
+            if (MP instanceof ChainHalt) return ctx.response.body = MP.body();
+            if (MP !== null && MP !== undefined) payload = MP;
+          }
+          GPayload = payload;
         }
-        GPayload = payload;
-      }
 
-      ctx.response.body = this._endpoint({ query, payload: GPayload, ctx });
+        ctx.response.body = this._endpoint({ query, payload: GPayload, ctx });
+      } catch (error) {
+        ctx.response.body = { error };
+      }
     };
   }
 }
 
-export class Group<S, Q = Infer<S>> {
+export class Group<S, Q = InferValidator<S>> {
   _chain: ChainMiddleware<Q>[];
   _group: string;
 

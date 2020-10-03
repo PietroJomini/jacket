@@ -16,24 +16,24 @@ export class Router {
     this.routes = [];
   }
 
-  register(M: HttpMethod, R: string, C: Controller<any>): Router {
+  register(M: HttpMethod, R: string, C: Controller<any, any>): Router {
     this.routes.push({ method: M, route: R, controller: C });
     return this;
   }
 
-  get(R: string, C: Controller<any>) {
+  get(R: string, C: Controller<any, any>) {
     this.register("GET", R, C);
     return this;
   }
-  post(R: string, C: Controller<any>) {
+  post(R: string, C: Controller<any, any>) {
     this.register("POST", R, C);
     return this;
   }
-  patch(R: string, C: Controller<any>) {
+  patch(R: string, C: Controller<any, any>) {
     this.register("PATCH", R, C);
     return this;
   }
-  delete(R: string, C: Controller<any>) {
+  delete(R: string, C: Controller<any, any>) {
     this.register("DELETE", R, C);
     return this;
   }
@@ -55,15 +55,15 @@ export class Router {
 
   normalize(): OakRouter {
     const oakRouter = new OakRouter();
-    for (const route of this.routes) {
-      if (route.method === "GET") {
-        oakRouter.get(route.route, route.controller.construct());
-      } else if (route.method === "DELETE") {
-        oakRouter.delete(route.route, route.controller.construct());
-      } else if (route.method === "PATCH") {
-        oakRouter.patch(route.route, route.controller.construct());
-      } else if (route.method === "POST") {
-        oakRouter.post(route.route, route.controller.construct());
+    for (const { method, controller, route } of this.routes) {
+      if (method === "GET") {
+        oakRouter.get(route, <Middleware> controller.construct());
+      } else if (method === "DELETE") {
+        oakRouter.delete(route, <Middleware> controller.construct());
+      } else if (method === "PATCH") {
+        oakRouter.patch(route, <Middleware> controller.construct());
+      } else if (method === "POST") {
+        oakRouter.post(route, <Middleware> controller.construct());
       }
     }
     return oakRouter;
