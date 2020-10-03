@@ -1,3 +1,5 @@
+import { ValidationError } from "./ValidationError.ts";
+
 export type FunctionType<R = any, P extends unknown[] = any[]> = (
   ...args: P
 ) => R;
@@ -24,8 +26,8 @@ export type LiteralTypes = {
 
 export const literalValidator = <T extends keyof LiteralTypes>(literal: T) =>
   new Validator((V) => {
-    if (typeof V !== literal) throw new TypeError(`Expected to be ${literal}`);
-    return V as LiteralTypes[T];
+    if (typeof V === literal) return V as LiteralTypes[T];
+    throw new ValidationError(literal);
   });
 
 export type InferValidator<V> = V extends Validator<infer X> ? X
