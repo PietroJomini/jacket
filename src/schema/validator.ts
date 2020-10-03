@@ -1,4 +1,4 @@
-import { ValidationError } from "./ValidationError.ts";
+import { ValidationError, VerificationError } from "./Errors.ts";
 
 export type FunctionType<R = any, P extends unknown[] = any[]> = (
   ...args: P
@@ -15,6 +15,20 @@ export class Validator<D> {
     return new Validator<typeof def>((V?) => {
       if (V === null || V === "" || V === undefined) return def;
       return this.test(V);
+    });
+  }
+
+  transform(trans: FunctionType<D>) {
+    return new Validator<D>((V) => this.test(trans(V)));
+  }
+
+  verify(cond: FunctionType<boolean>, desc?: string) {
+    return new Validator<D>((V) => {
+      const tested = this.test(V);
+      if (cond(tested)) return tested;
+      throw new VerificationError(
+        `Validation error${desc ? ` : ${desc}` : ""}`,
+      );
     });
   }
 }

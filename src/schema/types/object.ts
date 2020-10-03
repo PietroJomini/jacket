@@ -1,5 +1,5 @@
 import { Validator, InferValidator } from "../validator.ts";
-import { ValidationError } from "../ValidationError.ts";
+import { ValidationError, PathlikeError } from "../Errors.ts";
 
 export const object = <
   T extends Record<string, any>,
@@ -14,8 +14,9 @@ export const object = <
       try {
         parsed[key] = S[key].test(V[key]);
       } catch (e) {
-        if (e instanceof ValidationError) {
-          throw new ValidationError(e.type, [key, ...e.path]);
+        if (e instanceof PathlikeError) {
+          e.path = [key, ...e.path];
+          throw e;
         }
       }
     }
