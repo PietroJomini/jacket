@@ -11,7 +11,10 @@ API Wrapper for [deno](https://deno.land)
 ### Sobstitute
 
 - [ ] oak
-- [ ] computed_types
+- [x] computed_types
+  - [x] define schema
+  - [x] schema inference
+  - [x] creation of new types is fast and accessible
 
 ### Features
 
