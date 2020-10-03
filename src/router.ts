@@ -6,7 +6,7 @@ export type HttpMethod = "GET" | "DELETE" | "PATCH" | "POST";
 export type Route = {
   method: HttpMethod;
   route: string;
-  controller: Controller;
+  controller: Controller<any>;
 };
 
 export class Router {
@@ -16,24 +16,24 @@ export class Router {
     this.routes = [];
   }
 
-  register(M: HttpMethod, R: string, C: Controller): Router {
+  register(M: HttpMethod, R: string, C: Controller<any>): Router {
     this.routes.push({ method: M, route: R, controller: C });
     return this;
   }
 
-  get(R: string, C: Controller) {
+  get(R: string, C: Controller<any>) {
     this.register("GET", R, C);
     return this;
   }
-  post(R: string, C: Controller) {
+  post(R: string, C: Controller<any>) {
     this.register("POST", R, C);
     return this;
   }
-  patch(R: string, C: Controller) {
+  patch(R: string, C: Controller<any>) {
     this.register("PATCH", R, C);
     return this;
   }
-  delete(R: string, C: Controller) {
+  delete(R: string, C: Controller<any>) {
     this.register("DELETE", R, C);
     return this;
   }

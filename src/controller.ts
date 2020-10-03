@@ -2,31 +2,51 @@ import type { Context, Middleware } from "../deps.ts";
 import type { Infer } from "./schema.ts";
 import { ChainMiddleware, ChainHalt } from "./chain.ts";
 
-export type Controller<Q = any> = {
-  use: (callback: ChainMiddleware<Q>) => Controller<Q>;
-  construct: () => Middleware;
-};
+export class Controller<S, Q = Infer<S>> {
+  _schema: S;
+  _chain: Array<[string, ChainMiddleware<Q>[]]>;
+  _endpoint: ChainMiddleware<Q>;
 
-export const controller = <S, Q = Infer<S>>(
-  schema: S,
-  chain: ChainMiddleware<Q>[] = [],
-): Controller<Q> => ({
-  use: (C: ChainMiddleware<Q>) => controller(schema, [...chain, C]),
-  construct: () => {
-    const validator = (schema as any).destruct();
+  constructor(schema: S) {
+    this._schema = schema;
+    this._chain = [];
+    this._endpoint = ({ ctx }) => ctx.response.body;
+  }
+
+  use(...M: ChainMiddleware<Q>[]): Controller<S, Q> {
+    this._chain.push(["", M]);
+    return this;
+  }
+
+  group(G: string, ...M: ChainMiddleware<Q>[]): Controller<S, Q> {
+    this._chain.push([G, M]);
+    return this;
+  }
+
+  endpoint(E: ChainMiddleware<Q>): Controller<S, Q> {
+    this._endpoint = E;
+    return this;
+  }
+
+  construct(): Middleware {
+    const validator = (this._schema as any).destruct();
 
     return async (ctx: Context) => {
       const [err, query] = validator(ctx.state.body);
       if (err) return ctx.response.body = err;
 
-      let payload: any;
-      for await (const middleware of chain) {
-        const MP = await middleware({ query, payload, ctx });
-        if (MP instanceof ChainHalt) return ctx.response.body = MP.body();
-        if (MP !== null && MP !== undefined) payload = MP;
+      let GPayload: any;
+      for await (const [group, middlewares] of this._chain) {
+        let payload: any;
+        for await (const middleware of middlewares) {
+          const MP = await middleware({ query, payload, ctx });
+          if (MP instanceof ChainHalt) return ctx.response.body = MP.body();
+          if (MP !== null && MP !== undefined) payload = MP;
+        }
+        GPayload = payload;
       }
 
-      if (!ctx.response.body) ctx.response.body = payload;
+      ctx.response.body = this._endpoint({ query, payload: GPayload, ctx });
     };
-  },
-});
+  }
+}
