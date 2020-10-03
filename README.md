@@ -18,3 +18,7 @@ API Wrapper for [deno](https://deno.land)
 - [x] session
 - [ ] db
   - [ ] mongo
+
+### Misc
+
+- [ ] Group `controller.chain.use` in goups. Payload is passed in each group but not between groups.
