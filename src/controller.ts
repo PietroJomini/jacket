@@ -13,15 +13,20 @@ export class Controller<S, Q = Infer<S>> {
     this._endpoint = ({ ctx }) => ctx.response.body;
   }
 
-  use(...M: ChainMiddleware<Q>[]): Controller<S, Q> {
-    this._chain.push(["", M]);
+  use(
+    G: ChainMiddleware<Q> | Group<S>,
+    ...M: ChainMiddleware<Q>[]
+  ): Controller<S, Q> {
+    this._chain.push(
+      G instanceof Group
+        ? [G._group, <ChainMiddleware<Q>[]> G._chain]
+        : ["", [G, ...M]],
+    );
     return this;
   }
 
-  group(G: string | Group<S>, ...M: ChainMiddleware<Q>[]): Controller<S, Q> {
-    if (G instanceof Group) {
-      this._chain.push([G._group, <ChainMiddleware<Q>[]> G._chain]);
-    } else this._chain.push([G, M]);
+  group(G: string, ...M: ChainMiddleware<Q>[]): Controller<S, Q> {
+    this._chain.push([G, M]);
     return this;
   }
 

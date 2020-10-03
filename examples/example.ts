@@ -21,7 +21,7 @@ const g = new Group<typeof schema>("validate age")
 
 const c = new Controller(schema)
   .use(({ query }) => console.log(query))
-  .group(g)
+  .use(g)
   .endpoint(({ query: { age, name } }) => `${name} is ${age} yo`);
 
 router.get("/", c);
