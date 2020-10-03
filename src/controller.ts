@@ -60,6 +60,10 @@ export class Controller<S extends Validator<any>, Q = InferValidator<S>> {
 }
 
 export class Group<S, Q = InferValidator<S>> {
+  static for<S extends Validator<any>>(C: Controller<S>, G: string) {
+    return new Group<S>(G);
+  }
+
   _chain: ChainMiddleware<Q>[];
   _group: string;
 
