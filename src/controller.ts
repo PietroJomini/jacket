@@ -18,8 +18,10 @@ export class Controller<S, Q = Infer<S>> {
     return this;
   }
 
-  group(G: string, ...M: ChainMiddleware<Q>[]): Controller<S, Q> {
-    this._chain.push([G, M]);
+  group(G: string | Group<S>, ...M: ChainMiddleware<Q>[]): Controller<S, Q> {
+    if (G instanceof Group) {
+      this._chain.push([G._group, <ChainMiddleware<Q>[]> G._chain]);
+    } else this._chain.push([G, M]);
     return this;
   }
 
@@ -48,5 +50,20 @@ export class Controller<S, Q = Infer<S>> {
 
       ctx.response.body = this._endpoint({ query, payload: GPayload, ctx });
     };
+  }
+}
+
+export class Group<S, Q = Infer<S>> {
+  _chain: ChainMiddleware<Q>[];
+  _group: string;
+
+  constructor(G: string) {
+    this._chain = [];
+    this._group = G;
+  }
+
+  use(...M: ChainMiddleware<Q>[]) {
+    this._chain = this._chain.concat(M);
+    return this;
   }
 }

@@ -1,7 +1,7 @@
 export { Server } from "./src/server.ts";
 export { Router } from "./src/router.ts";
 export { types } from "./src/schema.ts";
-export { Controller } from "./src/controller.ts";
+export { Controller, Group } from "./src/controller.ts";
 export { ChainHalt, ensure } from "./src/chain.ts";
 export { middleware as session } from "./src/session/session.ts";
 
