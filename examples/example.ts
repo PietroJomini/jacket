@@ -16,6 +16,8 @@ const schema = types.object({
   nov: types.null,
   alive: types.boolean,
   someday: types.date,
+  tags: types.array.of(types.string),
+  tags2: types.array.of(types.array.of(types.boolean)),
 });
 
 const c = new Controller(schema).endpoint(({ query: { age, name } }) =>
