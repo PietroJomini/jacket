@@ -14,15 +14,14 @@ export class Controller<S extends Validator<any>, Q = InferValidator<S>> {
     this._endpoint = ({ ctx }) => ctx.response.body;
   }
 
-  use(
-    G: ChainMiddleware<Q> | Group<S>,
-    ...M: ChainMiddleware<Q>[]
-  ): Controller<S, Q> {
-    this._chain.push(
-      G instanceof Group
-        ? [G._group, <ChainMiddleware<Q>[]> G._chain]
-        : ["", [G, ...M]],
-    );
+  use(...M: ChainMiddleware<Q>[] | Group<S>[]): Controller<S, Q> {
+    const MT: ChainMiddleware<Q>[] = [];
+    M.forEach((E: ChainMiddleware<Q> | Group<S>) => {
+      if (E instanceof Group) {
+        this._chain.push([E._group, <ChainMiddleware<Q>[]> E._chain]);
+      } else MT.push(E);
+    });
+    if (MT.length > 0) this._chain.push(["", MT]);
     return this;
   }
 
