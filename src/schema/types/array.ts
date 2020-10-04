@@ -23,7 +23,6 @@ export class ArrayValidator<D extends unknown[]> extends Validator<D> {
 export const array = new ArrayValidator((V) => {
   try {
     if (typeof V === "string") V = JSON.parse(V);
-    console.log(V);
     if (!Array.isArray(V)) throw "";
     return V;
   } catch (_) {
