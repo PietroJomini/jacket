@@ -1,14 +1,15 @@
-import type { Context, Middleware } from "../deps.ts";
+import type { Context } from "../deps.ts";
 import type { InferValidator, Validator } from "./schema/validator.ts";
 import { ChainMiddleware, ChainHalt } from "./chain.ts";
+import * as types from "./schema/types/index.ts";
 
 export class Controller<S extends Validator<any>, Q = InferValidator<S>> {
   _schema: S;
   _chain: Array<[string, ChainMiddleware<Q>[]]>;
   _endpoint: ChainMiddleware<Q>;
 
-  constructor(schema: S) {
-    this._schema = schema;
+  constructor(schema?: S) {
+    this._schema = schema || types.null as S;
     this._chain = [];
     this._endpoint = ({ ctx }) => ctx.response.body;
   }
