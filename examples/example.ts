@@ -13,6 +13,8 @@ const router = new Router();
 const schema = types.object({
   name: types.string,
   age: types.number.transform((V) => Number(V)).verify((V) => !isNaN(V)),
+  nov: types.null,
+  alive: types.boolean,
 });
 
 const c = new Controller(schema).endpoint(({ query: { age, name } }) =>
