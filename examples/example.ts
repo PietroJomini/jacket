@@ -15,6 +15,7 @@ const schema = types.object({
   age: types.number.transform((V) => Number(V)).verify((V) => !isNaN(V)),
   nov: types.null,
   alive: types.boolean,
+  someday: types.date,
 });
 
 const c = new Controller(schema).endpoint(({ query: { age, name } }) =>
