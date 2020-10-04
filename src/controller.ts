@@ -51,7 +51,7 @@ export class Controller<S extends Validator<any>, Q = InferValidator<S>> {
           GP = P[group];
         }
 
-        ctx.response.body = this._endpoint({ query, payload: GP, ctx });
+        ctx.response.body = await this._endpoint({ query, payload: GP, ctx });
       } catch (error) {
         ctx.response.body = { error };
       }
