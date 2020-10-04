@@ -41,18 +41,18 @@ export class Controller<S extends Validator<any>, Q = InferValidator<S>> {
       try {
         const query = this._schema.test(ctx.state.body);
 
-        let GPayload: any;
+        let GP: any;
+        const P: Record<string, any> = {};
         for await (const [group, middlewares] of this._chain) {
-          let payload: any;
           for await (const middleware of middlewares) {
-            const MP = await middleware({ query, payload, ctx });
+            const MP = await middleware({ query, payload: P[group], ctx });
             if (MP instanceof ChainHalt) return ctx.response.body = MP.body();
-            if (MP !== null && MP !== undefined) payload = MP;
+            if (MP !== null && MP !== undefined) P[group] = MP;
           }
-          GPayload = payload;
+          GP = P[group];
         }
 
-        ctx.response.body = this._endpoint({ query, payload: GPayload, ctx });
+        ctx.response.body = this._endpoint({ query, payload: GP, ctx });
       } catch (error) {
         ctx.response.body = { error };
       }
