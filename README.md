@@ -1,6 +1,6 @@
 # Jacket
 
-> The output of a web API shouldn't be the restults of a series of direct consequences but the output of a complex choice mesh (of chains).
+> The output of a web API should not be the result of a series of direct consequences but the output of a complex choice mesh (of chains).
 
 ## Chain
 A `chain` is an ordinated group of nodes through which a payload is conveyed.
