@@ -4,10 +4,11 @@
     - [x] Listen
       - [x] Manual
       - [x] Automatic
-    - [ ] Close
+    - [x] Close
   - [ ] Custom request
     - [ ] Url
     - [ ] Method
+    - [ ] Allow respond and close in the same chain
 - [ ] Chainable middleware system
   - [ ] Custom response
   - [ ] Payload system
