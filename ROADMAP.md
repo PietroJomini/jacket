@@ -1,5 +1,16 @@
 ### 0.1
-- [ ] Basic HTTP Server
+- [ ] Deno std/http wrapper
+  - [ ] Wrapper class
+    - [x] Listen
+      - [x] Manual
+      - [x] Automatic
+    - [ ] Close
+  - [ ] Custom request
+    - [ ] Url
+    - [ ] Method
+- [ ] Chainable middleware system
+  - [ ] Custom response
+  - [ ] Payload system
 
 ### 0.2
 - [ ] Complete HTTP Server
@@ -7,6 +18,12 @@
     - [ ] Text
     - [ ] HTML
     - [ ] Json
+  - [ ] More request fields
+    - [ ] Headers
+    - [ ] Query
+    - [ ] Body
+    - [ ] Cookies
+    - [ ] Parameters
   - [ ] Internal status codes handler
 
 ### 0.3
@@ -38,3 +55,4 @@
 ### Misc
 - [ ] Pogo-like inject
 - [ ] Sockets
+- [ ] Custom http from raw tcp
