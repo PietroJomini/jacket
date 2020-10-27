@@ -1,6 +1,6 @@
 ### 0.1
 - [ ] Deno std/http wrapper
-  - [ ] Wrapper class
+  - [x] Wrapper class
     - [x] Listen
       - [x] Manual
       - [x] Automatic
